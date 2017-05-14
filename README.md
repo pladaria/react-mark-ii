@@ -1,8 +1,8 @@
 <p align="center">
-<img width="90%" src="./logo.png" alt="react-mark-ii"/>
+<img width="90%" src="https://raw.githubusercontent.com/pladaria/react-mark-ii/master/logo.png" alt="react-mark-ii"/>
 </p>
-<h1 align="center">react-mark-ii</h1>
 <p align="center">
+<b><big><big>react-mark-ii</big></big></b><br/>
 Ultra small and fast text formatter for React
 </p>
 <p align="center">

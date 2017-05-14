@@ -54,5 +54,13 @@
   "license": "MIT",
   "directories": {
     "test": "test"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pladaria/react-mark-ii.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pladaria/react-mark-ii/issues"
+  },
+  "homepage": "https://github.com/pladaria/react-mark-ii#readme"
 }
