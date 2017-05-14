@@ -11,7 +11,7 @@
     "clean": "rimraf dist coverage .nyc_output",
     "build": "babel src --out-dir dist",
     "prepublish": "npm run lint && npm test && npm run build",
-    "coveralls": "cat ./coverage/lcov.ok | ./node_modules/.bin/coveralls"
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "keywords": [
     "text",
