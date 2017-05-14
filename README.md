@@ -12,8 +12,8 @@ Ultra small and fast text formatter for React
 
 ## Features
 
-  - Very small! (parser and renderer are just 50 lines of code)
-  - Fast!
+  - Very small (parser and renderer are just **50 lines of code**!)
+  - Ultra fast!
   - Dependency free
   - Configurable
 
