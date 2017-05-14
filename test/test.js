@@ -11,11 +11,11 @@ test('happy case', t => {
 });
 
 test('readme simple example', t => {
-    const str = '*bold* _underline_ ~strike~ `code`';
+    const str = '*bold* _emphasis_ ~strike~ `code`';
     const result = render(<Mark>{str}</Mark>);
     const expected =
         '<div><strong>bold</strong> ' +
-        '<ins>underline</ins> ' +
+        '<em>emphasis</em> ' +
         '<del>strike</del> ' +
         '<code>code</code></div>';
     t.is(result, expected);

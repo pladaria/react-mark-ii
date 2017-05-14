@@ -30,7 +30,7 @@ Ultra small and fast text formatter for React
 ```javascript
 import Mark from 'react-mark-ii';
 //...
-const str = '*bold* _underline_ ~strike~ `code`';
+const str = '*bold* _emphasis_ ~strike~ `code`';
 //...
 <Mark>{str}</Mark>
 ```
@@ -40,7 +40,7 @@ Render result:
 ``` html
 <div>
   <strong>bold</strong>
-  <ins>underline</ins>
+  <em>emphasis</em>
   <del>strike</del>
   <code>code</code>
 </div>

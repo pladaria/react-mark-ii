@@ -3,7 +3,7 @@ const {parse} = require('./parser');
 
 const DEFAULT_RENDERERS = {
     '*': 'strong',
-    '_': 'ins',
+    '_': 'em',
     '~': 'del',
     '`': 'code',
 };
