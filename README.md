@@ -49,7 +49,7 @@ With the `styles` prop you can use custom styles:
 ```javascript
 import Mark from 'react-mark-ii';
 //...
-const custom = {
+const myStyles = {
     '*': {fontStyle: 'italic'},
     '~': {color: 'red'},
     '`': {fontFamily: 'script'},
@@ -58,7 +58,7 @@ const custom = {
 
 const str = '*bold* _underline_ ~strike~ `code`';
 //...
-<Mark styles={custom}>{str}</Mark>
+<Mark styles={myStyles}>{str}</Mark>
 ```
 
 Render result:
@@ -74,7 +74,29 @@ Render result:
 
 ## Custom marks
 
-With the `marks` prop you can define your own format marks
+With the `marks` prop you can define your own format marks (for now they must be single chars):
+
+```javascript
+import Mark from 'react-mark-ii';
+//...
+const myStyles = {
+    '^': {color: 'blue'},
+    '+': {color: 'red'},
+};
+const myMarks = '^+';
+const str = '^text^ +more text+';
+//...
+<Mark marks={myMarks} styles={myStyles}>{str}</Mark>
+```
+
+Render result:
+
+```html
+<div>
+  <span style="color:blue;">text</span>
+  <span style="color:red;">more text</span>
+</div>
+```
 
 ## License
 
