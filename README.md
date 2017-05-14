@@ -39,21 +39,21 @@ Render result:
 
 ``` html
 <div>
-  <span style="font-weight:bold;">bold</span>
-  <span style="text-decoration:underline;">underline</span>
-  <span style="text-decoration:line-through;">strike</span>
-  <span style="font-family:monospace;background:#ddd;">code</span>
+  <strong>bold</strong>
+  <ins>underline</ins>
+  <del>strike</del>
+  <code>code</code>
 </div>
 ```
 
-## Custom styles
+## Custom renderers
 
-With the `styles` prop you can use custom styles:
+With the `renderers` prop you can define the React component or tag name string that will render a specific mark:
 
 ```javascript
 import Mark from 'react-mark-ii';
 //...
-const myStyles = {
+const myRenderers = {
     '*': {fontStyle: 'italic'},
     '~': {color: 'red'},
     '`': {fontFamily: 'script'},
@@ -62,17 +62,17 @@ const myStyles = {
 
 const str = '*bold* _underline_ ~strike~ `code`';
 //...
-<Mark styles={myStyles}>{str}</Mark>
+<Mark renderers={myRenderers}>{str}</Mark>
 ```
 
 Render result:
 
 ```html
 <div>
-  <span style="font-style:italic;">bold</span>
-  <span style="color:green;">underline</span>
+  <b>bold</b>
+  <u>underline</u>
   <span style="color:red;">strike</span>
-  <span style="font-family:script;">code</span>
+  <kbd>code</kbd>
 </div>
 ```
 
@@ -83,22 +83,22 @@ With the `marks` prop you can define your own format marks (for now they must be
 ```javascript
 import Mark from 'react-mark-ii';
 //...
-const myStyles = {
-    '^': {color: 'blue'},
-    '+': {color: 'red'},
+const myRenderers = {
+    '^': 'sup', // superscript
+    '+': 'strong', // bold
 };
 const myMarks = '^+';
-const str = '^text^ +more text+';
+const str = '^superscript^ +bold text+';
 //...
-<Mark marks={myMarks} styles={myStyles}>{str}</Mark>
+<Mark marks={myMarks} renderers={myRenderers}>{str}</Mark>
 ```
 
 Render result:
 
 ```html
 <div>
-  <span style="color:blue;">text</span>
-  <span style="color:red;">more text</span>
+  <sup>superscript</sup>
+  <strong>bold text</strong>
 </div>
 ```
 

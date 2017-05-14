@@ -1,29 +1,30 @@
 const React = require('react');
 const {parse} = require('./parser');
 
-const DEFAULT_STYLES = {
-    '*': {fontWeight: 'bold'},
-    '_': {textDecoration:'underline'},
-    '~': {textDecoration: 'line-through'},
-    '`': {fontFamily: 'monospace', background: '#ddd'},
+const DEFAULT_RENDERERS = {
+    '*': 'strong',
+    '_': 'ins',
+    '~': 'del',
+    '`': 'code',
 };
 
-const render = (node, styles, raw = false) => {
+const render = (node, renderers, raw = false) => {
     const t = node.type;
-    const join = (raw) => node.children.map(n => render(n, styles, raw));
+    const join = (raw) => node.children.map(n => render(n, renderers, raw));
     if (t && node.closed) {
         if (t === '`') {
-            return <span style={styles[t]}>{join(true)}</span>;
+            return React.createElement(renderers[t], {}, ...join(true));
         }
-        return raw ? [t, join(raw), t] : <span style={styles[t]}>{join(raw)}</span>;
+        return raw ? [t, join(raw), t] : React.createElement(renderers[t], {}, ...join(raw));
     }
     return [node.text, t, join(raw)].filter(Boolean);
 };
 
 const Mark = ({
     children,
-    styles = {},
+    renderers = {},
     marks,
+    ...rest
 }) => {
     const elements = React.Children.toArray(children);
     const [str = ''] = elements;
@@ -37,7 +38,11 @@ const Mark = ({
         }
     }
 
-    return <div>{render(parse(str, marks), Object.assign({}, DEFAULT_STYLES, styles))}</div>;
+    return (
+        <div {...rest}>
+            {render(parse(str, marks), {...DEFAULT_RENDERERS, ...renderers})}
+        </div>
+    );
 };
 
 export default Mark;
