@@ -49,9 +49,7 @@ With the `styles` you can use custom styles
 For example:
 ```javascript
 import Mark from 'react-mark-ii';
-
 //...
-
 const custom = {
     '*': {fontStyle: 'italic'},
     '~': {color: 'red'},
@@ -60,7 +58,7 @@ const custom = {
 };
 
 const str = '*bold* _underline_ ~strike~ `code`';
-
+//...
 <Mark styles={custom}>{str}</Mark>
 ```
 
