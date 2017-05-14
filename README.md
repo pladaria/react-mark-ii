@@ -44,9 +44,8 @@ Render result:
 
 ## Custom styles
 
-With the `styles` you can use custom styles
+With the `styles` prop you can use custom styles:
 
-For example:
 ```javascript
 import Mark from 'react-mark-ii';
 //...
@@ -72,6 +71,10 @@ Render result:
   <span style="font-family:script;">code</span>
 </div>
 ```
+
+## Custom marks
+
+With the `marks` prop you can define your own format marks
 
 ## License
 
