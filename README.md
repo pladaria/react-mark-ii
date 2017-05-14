@@ -54,10 +54,10 @@ With the `renderers` prop you can define the React component or tag name string 
 import Mark from 'react-mark-ii';
 //...
 const myRenderers = {
-    '*': {fontStyle: 'italic'},
-    '~': {color: 'red'},
-    '`': {fontFamily: 'script'},
-    '_': {color: 'green'},
+    '*': 'b',
+    '_': 'u',
+    '~': ({children}) => <span style={{color: 'red'}}>{children}</span>,
+    '`': 'kbd',
 };
 
 const str = '*bold* _underline_ ~strike~ `code`';
