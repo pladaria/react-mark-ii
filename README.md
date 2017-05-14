@@ -104,7 +104,7 @@ Render result:
 
 ## Other props
 
-The all other props are passed to the wrapper
+All other props are passed to the wrapper
 
 ```javascript
 <Mark className="my-class" style={{background: '#ddd'}}>*text*</Mark>
