@@ -102,8 +102,24 @@ Render result:
 </div>
 ```
 
+## Other props
+
+The all other props are passed to the wrapper
+
+```javascript
+<Mark className="my-class" style={{background: '#ddd'}}>*text*</Mark>
+```
+
+Render result:
+
+```html
+<div class="my-class" style="background:#ddd;">
+  <strong>text</strong>
+</div>
+```
+
 ## License
 
 MIT
 
-Logo font is [Armed Lighting](http://www.iconian.com/a.html) from Dan Zadorozny
+[Logo font](http://www.iconian.com/a.html)
