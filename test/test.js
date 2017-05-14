@@ -50,6 +50,12 @@ test('readme custom marks example', t => {
     t.is(result, expected);
 });
 
+test('readme rest of props example', t => {
+    const result = render(<Mark className="my-class" style={{background: '#ddd'}}>*text*</Mark>);
+    const expected = '<div class="my-class" style="background:#ddd;"><strong>text</strong></div>';
+    t.is(result, expected);
+});
+
 test('unclosed element', t => {
     const str = '*bold _under* line_';
     const result = render(<Mark>{str}</Mark>);
