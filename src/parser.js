@@ -1,4 +1,4 @@
-export const MARKS = '_~*`';
+const MARKS = '_~*`';
 const SPACE = '\n\r\t ';
 const PUNCTUATION = ',.;:';
 
