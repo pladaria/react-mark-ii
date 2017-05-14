@@ -1,5 +1,5 @@
 const React = require('react');
-const {parse, MARKS} = require('./parser');
+const {parse} = require('./parser');
 
 const DEFAULT_STYLES = {
     '*': {fontWeight: 'bold'},
@@ -23,17 +23,17 @@ const render = (node, styles, raw = false) => {
 const Mark = ({
     children,
     styles = {},
-    marks = MARKS,
+    marks,
 }) => {
     const elements = React.Children.toArray(children);
     const [str = ''] = elements;
 
     if (process.env.NODE_ENV !== 'production') {
         if (elements.length !== 1) {
-            throw 'One child of type string is required';
+            throw Error('One child of type string is required');
         }
-        if ((typeof str !== 'string') && !(str instanceof String)) {
-            throw 'The only child of the Mark component must be a string';
+        if (typeof str !== 'string') {
+            throw Error('The only child of the Mark component must be a string');
         }
     }
 

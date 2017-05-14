@@ -17,8 +17,8 @@ const PUNCTUATION = ',.;:';
  * @param {boolean} [closed] - True if this node is properly closed
  * @return {Node}
  */
-const createNode = (type, parent, closed = false) =>
-    ({type, parent, closed, text: '', children: []});
+const createNode = (type, parent) =>
+    ({type, parent, closed: false, text: '', children: []});
 
 /**
  * @param {string} str
