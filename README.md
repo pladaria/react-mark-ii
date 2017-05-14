@@ -17,6 +17,10 @@ Ultra small and fast text formatter for React
   - Dependency free
   - Configurable
 
+## Live demo
+
+[Demo!](https://runkit.com/pladaria/react-mark-ii-demo)
+
 ## Install
 
     npm install --save react-mark-ii
