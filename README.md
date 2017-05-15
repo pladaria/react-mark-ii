@@ -104,7 +104,7 @@ Render result:
 
 ## Custom wrapper
 
-By default your children will be wrapped with a `div` you can override this with the `wrap` prop. You can use a React component or a tag name string.
+By default your children will be wrapped with a `div`. Use the `wrap` prop to have a different wrapper. You can use a React component or a tag name string.
 
 ```javascript
 <Mark wrap='span'>*text*</Mark>
