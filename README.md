@@ -107,7 +107,7 @@ Render result:
 By default your children will be wrapped with a `div`. Use the `wrap` prop to have a different wrapper. You can use a React component or a tag name string.
 
 ```javascript
-<Mark wrap='span'>*text*</Mark>
+<Mark wrap="span">*text*</Mark>
 ```
 
 Render result:
