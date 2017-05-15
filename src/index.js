@@ -20,17 +20,15 @@ const render = (node, renderers, raw = false) => {
     return [node.text, t, join(raw)].filter(Boolean);
 };
 
-const traverse = (children, marks, renderers) => {
-    return React.Children.map(children, child => {
-        if (React.isValidElement(child)) {
-            return React.cloneElement(child, {}, ...traverse(child.props.children));
-        }
-        if (typeof child === 'string') {
-            return render(parse(child, marks), {...DEFAULT_RENDERERS, ...renderers});
-        }
-        return child;
-    });
-};
+const traverse = (children, marks, renderers) => React.Children.map(children, child => {
+    if (React.isValidElement(child)) {
+        return React.cloneElement(child, {}, ...traverse(child.props.children));
+    }
+    if (typeof child === 'string') {
+        return render(parse(child, marks), {...DEFAULT_RENDERERS, ...renderers});
+    }
+    return child;
+});
 
 const Mark = ({
     children,
