@@ -1,6 +1,6 @@
 const MARKS = '_~*`';
 const SPACE = '\n\r\t ';
-const PUNCTUATION = ',.;:';
+const PUNCTUATION = ',.;:?!()[]{}/-"\'';
 
 /**
  * @typedef {Object} Node
