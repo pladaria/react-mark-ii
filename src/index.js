@@ -13,16 +13,16 @@ const render = (node, renderers, raw = false) => {
     const join = (raw) => node.children.map(n => render(n, renderers, raw));
     if (t && node.closed) {
         if (t === '`') {
-            return React.createElement(renderers[t], {}, ...join(true));
+            return React.createElement(renderers[t], {}, join(true));
         }
-        return raw ? [t, join(raw), t] : React.createElement(renderers[t], {}, ...join(raw));
+        return raw ? [t, join(raw), t] : React.createElement(renderers[t], {}, join(raw));
     }
     return [node.text, t, join(raw)].filter(Boolean);
 };
 
 const traverse = (children, marks, renderers) => React.Children.map(children, child => {
     if (React.isValidElement(child)) {
-        return React.cloneElement(child, {}, ...traverse(child.props.children, marks, renderers));
+        return React.cloneElement(child, {}, traverse(child.props.children, marks, renderers));
     }
     if (typeof child === 'string') {
         return render(parse(child, marks), {...DEFAULT_RENDERERS, ...renderers});
