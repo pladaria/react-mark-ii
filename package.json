@@ -1,6 +1,6 @@
 {
   "name": "react-mark-ii",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Ultra small and fast text formatter for React",
   "main": "dist/index.js",
   "author": "Pedro Ladaria <pedro.ladaria@gmail.com>",
