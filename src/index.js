@@ -8,14 +8,14 @@ const DEFAULT_RENDERERS = {
     '`': 'code',
 };
 
-const render = (node, renderers, raw = false) => {
+const render = (node, renderers, raw = false, key = 0) => {
     const t = node.type;
-    const join = (raw) => node.children.map(n => render(n, renderers, raw));
+    const join = (raw) => node.children.map((n, key) => render(n, renderers, raw, key));
     if (t && node.closed) {
         if (t === '`') {
-            return React.createElement(renderers[t], {}, join(true));
+            return React.createElement(renderers[t], {key}, join(true));
         }
-        return raw ? [t, join(raw), t] : React.createElement(renderers[t], {}, join(raw));
+        return raw ? [t, join(raw), t] : React.createElement(renderers[t], {key}, join(raw));
     }
     return [node.text, t, join(raw)].filter(Boolean);
 };
