@@ -14,7 +14,6 @@ const PUNCTUATION = ',.;:?!()[]{}/-"\'';
 /**
  * @param {string} type
  * @param {Node} parent - Reference to parent node
- * @param {boolean} [closed] - True if this node is properly closed
  * @return {Node}
  */
 const createNode = (type, parent) =>
