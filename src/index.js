@@ -22,7 +22,7 @@ const render = (node, renderers, raw = false) => {
 
 const traverse = (children, marks, renderers) => React.Children.map(children, child => {
     if (React.isValidElement(child)) {
-        return React.cloneElement(child, {}, ...traverse(child.props.children));
+        return React.cloneElement(child, {}, ...traverse(child.props.children, marks, renderers));
     }
     if (typeof child === 'string') {
         return render(parse(child, marks), {...DEFAULT_RENDERERS, ...renderers});

@@ -86,6 +86,9 @@ test('markup inside code tags is ignored', t => {
 });
 
 test('nested children', t => {
+    const myRenderers = {
+        '_': 'u',
+    };
     const children = (
         <span>
             *bold*
@@ -97,13 +100,13 @@ test('nested children', t => {
             {['~strike~', null, undefined, '', 0, 123]}
         </span>
     );
-    const result = render(<Mark>{children}</Mark>);
+    const result = render(<Mark renderers={myRenderers}>{children}</Mark>);
     const expected =
         '<div>' +
             '<span>' +
                 '<strong>bold</strong>' +
                 '<span style="color:red;">' +
-                    '<em>emphasis</em>' +
+                    '<u>emphasis</u>' +
                     '<b><code>code</code></b>' +
                 '</span>' +
                 '<del>strike</del>0123' +
