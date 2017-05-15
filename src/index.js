@@ -20,29 +20,26 @@ const render = (node, renderers, raw = false) => {
     return [node.text, t, join(raw)].filter(Boolean);
 };
 
+const traverse = (children, marks, renderers) => {
+    return React.Children.map(children, child => {
+        if (React.isValidElement(child)) {
+            return React.cloneElement(child, {}, ...traverse(child.props.children));
+        }
+        if (typeof child === 'string') {
+            return render(parse(child, marks), {...DEFAULT_RENDERERS, ...renderers});
+        }
+        return child;
+    });
+};
+
 const Mark = ({
     children,
     renderers = {},
     marks,
+    wrap = 'div',
     ...rest
-}) => {
-    const elements = React.Children.toArray(children);
-    const [str = ''] = elements;
-
-    if (process.env.NODE_ENV !== 'production') {
-        if (elements.length !== 1) {
-            throw Error('One child of type string is required');
-        }
-        if (typeof str !== 'string') {
-            throw Error('The only child of the Mark component must be a string');
-        }
-    }
-
-    return (
-        <div {...rest}>
-            {render(parse(str, marks), {...DEFAULT_RENDERERS, ...renderers})}
-        </div>
-    );
-};
+}) => React.Children.count(children)
+    ? React.createElement(wrap, rest, traverse(children, marks, {...DEFAULT_RENDERERS, ...renderers}))
+    : null;
 
 export default Mark;

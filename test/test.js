@@ -50,6 +50,12 @@ test('readme custom marks example', t => {
     t.is(result, expected);
 });
 
+test('readme custom wrapper example', t => {
+    const result = render(<Mark wrap='span'>*text*</Mark>);
+    const expected = '<span><strong>text</strong></span>';
+    t.is(result, expected);
+});
+
 test('readme rest of props example', t => {
     const result = render(<Mark className="my-class" style={{background: '#ddd'}}>*text*</Mark>);
     const expected = '<div class="my-class" style="background:#ddd;"><strong>text</strong></div>';
@@ -71,30 +77,43 @@ test('markup inside code tags is ignored', t => {
     t.is(result, expected);
 });
 
-test('one single child is required', t => {
-    t.throws(() => {
-        render(<Mark />);
-    });
-    t.throws(() => {
-        render(<Mark>{['s1', 's2']}</Mark>);
-    });
+test('markup inside code tags is ignored', t => {
+    const str = '`this _is_ *code*`';
+    const result = render(<Mark>{str}</Mark>);
+    const expected =
+        '<div><code>this _is_ *code*</code></div>';
+    t.is(result, expected);
 });
 
-test('child must be a string', t => {
-    t.throws(() => {
-        render(<Mark>{1}</Mark>);
-    });
-    t.throws(() => {
-        render(<Mark>{[1]}</Mark>);
-    });
-    t.pass(render(<Mark>string</Mark>));
-    t.pass(render(<Mark>{['string']}</Mark>));
+test('nested children', t => {
+    const children = (
+        <span>
+            *bold*
+            <span style={{color: 'red'}}>
+                _emphasis_
+                <b>`code`</b>
+                {null}
+            </span>
+            {['~strike~', null, undefined, '', 0, 123]}
+        </span>
+    );
+    const result = render(<Mark>{children}</Mark>);
+    const expected =
+        '<div>' +
+            '<span>' +
+                '<strong>bold</strong>' +
+                '<span style="color:red;">' +
+                    '<em>emphasis</em>' +
+                    '<b><code>code</code></b>' +
+                '</span>' +
+                '<del>strike</del>0123' +
+            '</span>' +
+        '</div>';
+    t.is(result, expected);
 });
 
-test('do not throw in production', t => {
-    const env = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'production';
-    t.pass(render(<Mark />));
-    t.pass(render(<Mark>{['s1', 's2']}</Mark>));
-    process.env.NODE_ENV = env;
+test('no children', t => {
+    const result = render(<Mark></Mark>);
+    const expected = '';
+    t.is(result, expected);
 });
