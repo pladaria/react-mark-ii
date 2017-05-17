@@ -1,4 +1,3 @@
-const MARKS = '_~*`';
 const SPACE = '\n\r\t ';
 const PUNCTUATION = ',.;:?!()[]{}/-"\'';
 
@@ -20,11 +19,12 @@ const createNode = (type, parent) =>
     ({type, parent, closed: false, text: '', children: []});
 
 /**
- * @param {string} str
+ * @param {string} str - String to parse
+ * @param {string} marks - Collection of marks (for now only single char marks are supported)
  * @return {Node}
  */
-const parse = (str, marks = MARKS) => {
-    const breaks = PUNCTUATION + MARKS + SPACE;
+const parse = (str, marks) => {
+    const breaks = PUNCTUATION + marks + SPACE;
     const ast = createNode('', null); // root node
     let node = createNode('', ast); // current node
     ast.children.push(node);

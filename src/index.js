@@ -8,7 +8,13 @@ const DEFAULT_RENDERERS = {
     '`': 'code',
 };
 
-const render = (node, renderers, raw = false, key = 0) => {
+/**
+ * @param {Node} node
+ * @param {Object} renderers
+ * @param {boolean} raw -  if true, inner styles will be ignored
+ * @param {number} key - React key
+ */
+const render = (node, renderers, raw, key) => {
     const t = node.type;
     const join = (raw) => node.children.map((n, key) => render(n, renderers, raw, key));
     if (t && node.closed) {
@@ -25,15 +31,15 @@ const traverse = (children, marks, renderers) => React.Children.map(children, ch
         return React.cloneElement(child, {}, traverse(child.props.children, marks, renderers));
     }
     if (typeof child === 'string') {
-        return render(parse(child, marks), {...DEFAULT_RENDERERS, ...renderers});
+        return render(parse(child, marks), renderers, false, 0);
     }
     return child;
 });
 
 const Mark = ({
     children,
-    renderers = {},
-    marks,
+    renderers = DEFAULT_RENDERERS,
+    marks = '_~*`',
     wrap = 'div',
     ...rest
 }) => React.Children.count(children)
