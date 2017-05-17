@@ -13,6 +13,7 @@ const DEFAULT_RENDERERS = {
  * @param {Object} renderers
  * @param {boolean} raw -  if true, inner styles will be ignored
  * @param {number} key - React key
+ * @return {React.Node}
  */
 const render = (node, renderers, raw, key) => {
     const t = node.type;
