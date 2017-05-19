@@ -47,7 +47,7 @@ Render result:
 </div>
 ```
 
-## Custom marks
+## Custom options
 
 With the `options` prop you can define your own markup:
 
@@ -60,13 +60,13 @@ Available options:
 import Mark from 'react-mark-ii';
 //...
 const options = {
-    '*': {renderer: 'b'},
+    '**': {renderer: 'b'},
     '_': {renderer: 'u'},
     '~': {renderer: ({children}) => <span className="red">{children}</span>},
     '`': {renderer: 'kbd', raw: true},
 };
 
-const str = '*bold* _underline_ ~strike~ `code`';
+const str = '**bold** _underline_ ~strike~ `code`';
 //...
 <Mark options={options}>{str}</Mark>
 ```
@@ -79,15 +79,6 @@ Render result:
   <u>underline</u>
   <span class="red">strike</span>
   <kbd>code</kbd>
-</div>
-```
-
-Render result:
-
-```html
-<div>
-  <sup>superscript</sup>
-  <strong>bold text</strong>
 </div>
 ```
 
