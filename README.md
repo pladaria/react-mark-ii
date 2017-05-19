@@ -2,7 +2,7 @@
 <img width="90%" src="https://raw.githubusercontent.com/pladaria/react-mark-ii/master/logo.png" alt="react-mark-ii"/>
 </p>
 <p align="center">
-<b><big><big>react-mark-ii</big></big></b><br/>
+<b>react-mark-ii</b><br/>
 Ultra small and fast text formatter for React
 </p>
 <p align="center">
@@ -12,8 +12,8 @@ Ultra small and fast text formatter for React
 
 ## Features
 
-  - Very small (parser and renderer are just **50 lines of code**!)
-  - Ultra fast!
+  - Very small (parser is just **50 lines of code**!)
+  - Super fast!
   - Dependency free
   - Configurable
 
@@ -30,7 +30,7 @@ Ultra small and fast text formatter for React
 ```javascript
 import Mark from 'react-mark-ii';
 //...
-const str = '*bold* _emphasis_ ~strike~ `code`';
+const str = '*bold* _emphasis_ ~strike~ `code` ```code block```';
 //...
 <Mark>{str}</Mark>
 ```
@@ -43,26 +43,32 @@ Render result:
   <em>emphasis</em>
   <del>strike</del>
   <code>code</code>
+  <pre>code block</pre>
 </div>
 ```
 
-## Custom renderers
+## Custom marks
 
-With the `renderers` prop you can define the React component or tag name string that will render a specific mark:
+With the `options` prop you can define your own markup:
+
+Available options:
+
+  - `renderer`: _React component_ or _tag name string_
+  - `raw`: (_boolean_) if `true`, inner marks will be ignored (useful for code marks)
 
 ```javascript
 import Mark from 'react-mark-ii';
 //...
-const myRenderers = {
-    '*': 'b',
-    '_': 'u',
-    '~': ({children}) => <span style={{color: 'red'}}>{children}</span>,
-    '`': 'kbd',
+const options = {
+    '*': {renderer: 'b'},
+    '_': {renderer: 'u'},
+    '~': {renderer: ({children}) => <span className="red">{children}</span>},
+    '`': {renderer: 'kbd', raw: true},
 };
 
 const str = '*bold* _underline_ ~strike~ `code`';
 //...
-<Mark renderers={myRenderers}>{str}</Mark>
+<Mark options={options}>{str}</Mark>
 ```
 
 Render result:
@@ -71,26 +77,9 @@ Render result:
 <div>
   <b>bold</b>
   <u>underline</u>
-  <span style="color:red;">strike</span>
+  <span class="red">strike</span>
   <kbd>code</kbd>
 </div>
-```
-
-## Custom marks
-
-With the `marks` prop you can define your own format marks (for now they must be single chars):
-
-```javascript
-import Mark from 'react-mark-ii';
-//...
-const myRenderers = {
-    '^': 'sup', // superscript
-    '+': 'strong', // bold
-};
-const myMarks = '^+'; // you could also use an array: ['^', '+']
-const str = '^superscript^ +bold text+';
-//...
-<Mark marks={myMarks} renderers={myRenderers}>{str}</Mark>
 ```
 
 Render result:

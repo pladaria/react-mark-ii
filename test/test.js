@@ -5,48 +5,37 @@ import {renderToStaticMarkup as render} from 'react-dom/server';
 import Mark from '../src/index';
 
 test('happy case', t => {
-    const result = render(<Mark marks="*" renderers={{'*': 'b'}}>*bold*</Mark>);
+    const result = render(<Mark options={{'*': {renderer: 'b'}}}>*bold*</Mark>);
     const expected = '<div><b>bold</b></div>';
     t.is(result, expected);
 });
 
 test('readme simple example', t => {
-    const str = '*bold* _emphasis_ ~strike~ `code`';
+    const str = '*bold* _emphasis_ ~strike~ `code` ```code block```';
     const result = render(<Mark>{str}</Mark>);
     const expected =
         '<div><strong>bold</strong> ' +
         '<em>emphasis</em> ' +
         '<del>strike</del> ' +
-        '<code>code</code></div>';
+        '<code>code</code> ' +
+        '<pre>code block</pre></div>';
     t.is(result, expected);
 });
 
-test('readme custom renderers example', t => {
+test('readme custom options example', t => {
     const str = '*bold* _underline_ ~strike~ `code`';
-    const myRenderers = {
-        '*': 'b',
-        '_': 'u',
-        '~': ({children}) => <span style={{color: 'red'}}>{children}</span>,
-        '`': 'kbd',
+    const options = {
+        '*': {renderer: 'b'},
+        '_': {renderer: 'u'},
+        '~': {renderer: ({children}) => <span style={{color: 'red'}}>{children}</span>},
+        '`': {renderer: 'kbd'},
     };
-    const result = render(<Mark renderers={myRenderers}>{str}</Mark>);
+    const result = render(<Mark options={options}>{str}</Mark>);
     const expected =
         '<div><b>bold</b> ' +
         '<u>underline</u> ' +
         '<span style="color:red;">strike</span> ' +
         '<kbd>code</kbd></div>';
-    t.is(result, expected);
-});
-
-test('readme custom marks example', t => {
-    const myRenderers = {
-        '^': 'sup', // superscript
-        '+': 'strong', // bold
-    };
-    const myMarks = '^+';
-    const str = '^superscript^ +bold text+';
-    const result = render(<Mark marks={myMarks} renderers={myRenderers}>{str}</Mark>);
-    const expected = '<div><sup>superscript</sup> <strong>bold text</strong></div>';
     t.is(result, expected);
 });
 
@@ -59,17 +48,6 @@ test('readme custom wrapper example', t => {
 test('readme rest of props example', t => {
     const result = render(<Mark className="my-class" style={{background: '#ddd'}}>*text*</Mark>);
     const expected = '<div class="my-class" style="background:#ddd;"><strong>text</strong></div>';
-    t.is(result, expected);
-});
-
-test('use array for marks', t => {
-    const str = '*bold* _emphasis_ ~strike~ `code`';
-    const result = render(<Mark marks={['*', '_', '~', '`']}>{str}</Mark>);
-    const expected =
-        '<div><strong>bold</strong> ' +
-        '<em>emphasis</em> ' +
-        '<del>strike</del> ' +
-        '<code>code</code></div>';
     t.is(result, expected);
 });
 
@@ -105,8 +83,11 @@ test('do not allow multiline styling', t => {
 });
 
 test('nested children', t => {
-    const myRenderers = {
-        '_': 'u',
+    const options = {
+        '_': {renderer: 'u'},
+        '~': {renderer: 'del'},
+        '*': {renderer: 'strong'},
+        '`': {renderer: 'code'},
     };
     const children = (
         <span>
@@ -119,7 +100,7 @@ test('nested children', t => {
             {['~strike~', null, undefined, '', 0, 123]}
         </span>
     );
-    const result = render(<Mark renderers={myRenderers}>{children}</Mark>);
+    const result = render(<Mark options={options}>{children}</Mark>);
     const expected =
         '<div>' +
             '<span>' +
@@ -141,14 +122,44 @@ test('no children', t => {
 });
 
 test('multichar marks', t => {
-    const myRenderers = {
-        '_': 'i',
-        '**': 'b',
-        '```': 'pre',
+    const options = {
+        '`': {renderer: 'code'},
+        '*': {renderer: 'i'},
+        '**': {renderer: 'b'},
+        '```': {renderer: 'pre', raw: true},
     };
-    const myMarks = ['_', '**', '```'];
-    const str = '**superscript** _bold_ ```text```';
-    const result = render(<Mark marks={myMarks} renderers={myRenderers}>{str}</Mark>);
-    const expected = '<div><sup>superscript</sup> <strong>bold text</strong></div>';
+    const str = '**bold** `code` *italic* ```code block```';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected =
+        '<div>' +
+            '<b>bold</b> ' +
+            '<code>code</code> ' +
+            '<i>italic</i> ' +
+            '<pre>code block</pre>' +
+        '</div>';
+    t.is(result, expected);
+});
+
+test('corner case joining code marks', t => {
+    const str = '````wat?````';
+    const result = render(<Mark>{str}</Mark>);
+    const expected =
+        '<div>' +
+            '<pre>`wat?</pre>`' +
+        '</div>';
+    t.is(result, expected);
+});
+
+test('corner case combining style marks', t => {
+    const options = {
+        '*': {renderer: 'i'},
+        '**': {renderer: 'b'},
+    };
+    const str = '***wat?***';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected =
+        '<div>' +
+            '<b>*wat?</b>*' +
+        '</div>';
     t.is(result, expected);
 });

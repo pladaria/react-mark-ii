@@ -20,7 +20,7 @@ const createNode = (type, parent) =>
 
 /**
  * @param {string} str - String to parse
- * @param {string} marks - Collection of marks (for now only single char marks are supported)
+ * @param {string[]} marks - list of marks
  * @return {Node}
  */
 const parse = (str, marks) => {
@@ -32,38 +32,44 @@ const parse = (str, marks) => {
     const opens = (p, n) => (!p || breaks.includes(p)) && !SPACE.includes(n);
     const closes = (n) => (!n || breaks.includes(n));
 
-    let c, n, p, tmp, par, stack = [];
-    for (let i = 0, len = str.length; i < len; i++) {
-        c = str[i];     // current
+    let i, c, n, p, len, tmp, par, mark, stack = [];
+    for (i = 0, len = str.length; i < len;) {
+        c = str[i]; // current
         p = str[i - 1]; // previous
-        n = str[i + 1]; // next
         if (c === '\n') {
             stack = [];
-        } else if (marks.includes(c)) {
-            if (closes(n) && stack.includes(c)) {
-                while (stack.length) {
-                    node = node.parent;
-                    if (stack.pop() === c) {
-                        node.closed = true;
-                        par = node.parent;
-                        node = createNode('', par);
-                        par.children.push(node);
-                        break;
+        } else {
+            mark = marks.find(m => m === str.substr(i, m.length));
+            if (mark) {
+                n = str[i + mark.length]; // next
+                if (closes(n) && stack.includes(mark)) {
+                    while (stack.length) {
+                        node = node.parent;
+                        if (stack.pop() === mark) {
+                            node.closed = true;
+                            par = node.parent;
+                            node = createNode('', par);
+                            par.children.push(node);
+                            break;
+                        }
                     }
+                    i += mark.length;
+                    continue;
                 }
-                continue;
-            }
-            if (opens(p, n) && !stack.includes(c)) {
-                stack.push(c);
-                par = node.parent;
-                tmp = createNode(c, par);
-                par.children.push(tmp);
-                node = createNode('', tmp);
-                tmp.children.push(node);
-                continue;
+                if (opens(p, n) && !stack.includes(mark)) {
+                    stack.push(mark);
+                    par = node.parent;
+                    tmp = createNode(mark, par);
+                    par.children.push(tmp);
+                    node = createNode('', tmp);
+                    tmp.children.push(node);
+                    i += mark.length;
+                    continue;
+                }
             }
         }
         node.text += c;
+        i++;
     }
     return ast;
 };
