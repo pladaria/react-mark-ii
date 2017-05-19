@@ -87,7 +87,7 @@ const myRenderers = {
     '^': 'sup', // superscript
     '+': 'strong', // bold
 };
-const myMarks = '^+';
+const myMarks = '^+'; // you could also use an array: ['^', '+']
 const str = '^superscript^ +bold text+';
 //...
 <Mark marks={myMarks} renderers={myRenderers}>{str}</Mark>

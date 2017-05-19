@@ -62,6 +62,17 @@ test('readme rest of props example', t => {
     t.is(result, expected);
 });
 
+test('use array for marks', t => {
+    const str = '*bold* _emphasis_ ~strike~ `code`';
+    const result = render(<Mark marks={['*', '_', '~', '`']}>{str}</Mark>);
+    const expected =
+        '<div><strong>bold</strong> ' +
+        '<em>emphasis</em> ' +
+        '<del>strike</del> ' +
+        '<code>code</code></div>';
+    t.is(result, expected);
+});
+
 test('unclosed element', t => {
     const str = '*bold _under* line_';
     const result = render(<Mark>{str}</Mark>);
@@ -82,6 +93,14 @@ test('markup inside code tags is ignored', t => {
     const result = render(<Mark>{str}</Mark>);
     const expected =
         '<div><code>this _is_ *code*</code></div>';
+    t.is(result, expected);
+});
+
+test('do not allow multiline styling', t => {
+    const str = '*foo\nbar*';
+    const result = render(<Mark>{str}</Mark>);
+    const expected =
+        '<div>*foo\nbar*</div>';
     t.is(result, expected);
 });
 
@@ -118,5 +137,18 @@ test('nested children', t => {
 test('no children', t => {
     const result = render(<Mark></Mark>);
     const expected = '';
+    t.is(result, expected);
+});
+
+test('multichar marks', t => {
+    const myRenderers = {
+        '_': 'i',
+        '**': 'b',
+        '```': 'pre',
+    };
+    const myMarks = ['_', '**', '```'];
+    const str = '**superscript** _bold_ ```text```';
+    const result = render(<Mark marks={myMarks} renderers={myRenderers}>{str}</Mark>);
+    const expected = '<div><sup>superscript</sup> <strong>bold text</strong></div>';
     t.is(result, expected);
 });

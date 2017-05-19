@@ -34,10 +34,12 @@ const parse = (str, marks) => {
 
     let c, n, p, tmp, par, stack = [];
     for (let i = 0, len = str.length; i < len; i++) {
-        p = str[i - 1]; // previous
         c = str[i];     // current
+        p = str[i - 1]; // previous
         n = str[i + 1]; // next
-        if (marks.includes(c)) {
+        if (c === '\n') {
+            stack = [];
+        } else if (marks.includes(c)) {
             if (closes(n) && stack.includes(c)) {
                 while (stack.length) {
                     node = node.parent;
