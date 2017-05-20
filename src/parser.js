@@ -32,14 +32,21 @@ const parse = (str, marks) => {
     const opens = (p, n) => (!p || breaks.includes(p)) && !SPACE.includes(n);
     const closes = (n) => (!n || breaks.includes(n));
 
-    let i, c, n, p, len, tmp, par, mark, stack = [];
+    let i, j, c, n, p, len = 0, tmp, par, mark = '', stack = [];
     for (i = 0, len = str.length; i < len;) {
         c = str[i]; // current
         p = str[i - 1]; // previous
         if (c === '\n') {
             stack = [];
         } else {
-            mark = marks.find(m => m === str.substr(i, m.length));
+            // the following for loop is equivalent to:
+            // mark = marks.find(m => m === str.substr(i, m.length));
+            for (mark = '', j = 0, tmp = marks[0]; j < marks.length; tmp = marks[++j]) {
+                if (c === tmp[0] && tmp === str.substr(i, tmp.length)) {
+                    mark = tmp;
+                    break;
+                }
+            }
             if (mark) {
                 n = str[i + mark.length]; // next
                 if (closes(n) && stack.includes(mark)) {
