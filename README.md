@@ -30,7 +30,7 @@ Ultra small and fast text formatter for React
 ```javascript
 import Mark from 'react-mark-ii';
 //...
-const str = '*bold* _emphasis_ ~strike~ `code` ```code block```';
+const str = '*bold* _emphasis_ ~strike~ `code` ```code\nblock```';
 //...
 <Mark>{str}</Mark>
 ```
@@ -43,7 +43,10 @@ Render result:
   <em>emphasis</em>
   <del>strike</del>
   <code>code</code>
-  <pre>code block</pre>
+  <pre>
+    code
+    block
+  </pre>
 </div>
 ```
 
@@ -55,6 +58,7 @@ Available options:
 
   - `renderer`: _React component_ or _tag name string_
   - `raw`: (_boolean_) if `true`, inner marks will be ignored (useful for code marks)
+  - `multiline`: (_boolean_) if `true` marks can be used across multiple lines
 
 ```javascript
 import Mark from 'react-mark-ii';
@@ -64,9 +68,10 @@ const options = {
     '_': {renderer: 'u'},
     '~': {renderer: ({children}) => <span className="red">{children}</span>},
     '`': {renderer: 'kbd', raw: true},
+    '```': {renderer: 'pre', raw: true, multiline: true},
 };
 
-const str = '**bold** _underline_ ~strike~ `code`';
+const str = '**bold** _underline_ ~strike~ `code` ```code\nblock```';
 //...
 <Mark options={options}>{str}</Mark>
 ```
@@ -79,6 +84,10 @@ Render result:
   <u>underline</u>
   <span class="red">strike</span>
   <kbd>code</kbd>
+  <pre>
+    code
+    block
+  </pre>
 </div>
 ```
 

@@ -2,11 +2,11 @@ const React = require('react');
 const {parse} = require('./parser');
 
 const DEFAULT_OPTIONS = {
-    '*': {renderer: 'strong', raw: false},
-    '_': {renderer: 'em', raw: false},
-    '~': {renderer: 'del', raw: false},
-    '`': {renderer: 'code', raw: true},
-    '```': {renderer: 'pre', raw: true},
+    '*': {renderer: 'strong', raw: false, multiline: false},
+    '_': {renderer: 'em', raw: false, multiline: false},
+    '~': {renderer: 'del', raw: false, multiline: false},
+    '`': {renderer: 'code', raw: true, multiline: false},
+    '```': {renderer: 'pre', raw: true, multiline: true},
 };
 
 /**
@@ -32,7 +32,7 @@ const traverse = (children, marks, options) => React.Children.map(children, chil
         return React.cloneElement(child, {}, traverse(child.props.children, marks, options));
     }
     if (typeof child === 'string') {
-        return render(parse(child, marks), options, false, 0);
+        return render(parse(child, marks, options), options, false, 0);
     }
     return child;
 });
@@ -43,7 +43,6 @@ const Mark = ({
     children,
     ...rest
 }) => {
-    // longer marks first
     const marks = Object.keys(options).sort((k1, k2) => k2.length - k1.length);
 
     if (React.Children.count(children)) {

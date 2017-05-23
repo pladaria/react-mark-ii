@@ -21,9 +21,10 @@ const createNode = (type, parent) =>
 /**
  * @param {string} str - String to parse
  * @param {string[]} marks - list of marks
+ * @param {Object} options - options for marks
  * @return {Node}
  */
-const parse = (str, marks) => {
+const parse = (str, marks, options) => {
     const breaks = PUNCTUATION + marks + SPACE;
     const ast = createNode('', null); // root node
     let node = createNode('', ast); // current node
@@ -37,7 +38,7 @@ const parse = (str, marks) => {
         c = str[i]; // current
         p = str[i - 1]; // previous
         if (c === '\n') {
-            stack = [];
+            stack = stack.filter(m => options[m].multiline);
         } else {
             // the following for loop is equivalent to:
             // mark = marks.find(m => m === str.substr(i, m.length));

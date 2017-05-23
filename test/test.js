@@ -28,14 +28,16 @@ test('readme custom options example', t => {
         '_': {renderer: 'u'},
         '~': {renderer: ({children}) => <span style={{color: 'red'}}>{children}</span>},
         '`': {renderer: 'kbd'},
+        '```': {renderer: 'pre', raw: true, multiline: true},
     };
-    const str = '**bold** _underline_ ~strike~ `code`';
+    const str = '**bold** _underline_ ~strike~ `code` ```code\nblock```';
     const result = render(<Mark options={options}>{str}</Mark>);
     const expected =
         '<div><b>bold</b> ' +
         '<u>underline</u> ' +
         '<span style="color:red;">strike</span> ' +
-        '<kbd>code</kbd></div>';
+        '<kbd>code</kbd> ' +
+        '<pre>code\nblock</pre></div>';
     t.is(result, expected);
 });
 
