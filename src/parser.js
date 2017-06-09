@@ -2,55 +2,72 @@ const SPACE = '\n\r\t ';
 const PUNCTUATION = ',.;:?!()[]{}/-"\'';
 
 /**
- * @typedef {Object} Node
+ * @typedef {Object} MarkNode
  * @property {string} type
- * @property {Node} parent
+ * @property {MarkNode} parent
  * @property {boolean} closed
  * @property {string} text
- * @property {Node[]} children
+ * @property {MarkNode[]} children
  */
 
 /**
- * @param {string} type
- * @param {Node} parent - Reference to parent node
- * @return {Node}
+ * @param {string} type - Mark type
+ * @param {MarkNode} parent - Reference to parent node
+ * @return {MarkNode}
  */
 const createNode = (type, parent) =>
     ({type, parent, closed: false, text: '', children: []});
 
 /**
+ * @param {string} str
+ * @param {string[]} marks
+ * @param {number} position
+ */
+const getMarkAt = (str, marks, position) => {
+    // the following for loop is equivalent to:
+    // mark = marks.find(m => m === str.substr(i, m.length));
+    for (let j = 0, c = str[position], mark = marks[0]; j < marks.length; mark = marks[++j]) {
+        if (c === mark[0] && mark === str.substr(position, mark.length)) {
+            return mark;
+        }
+    }
+    return '';
+};
+
+/**
  * @param {string} str - String to parse
  * @param {string[]} marks - list of marks
  * @param {Object} options - options for marks
- * @return {Node}
+ * @return {MarkNode}
  */
 const parse = (str, marks, options) => {
-    const breaks = PUNCTUATION + marks + SPACE;
+    const breaks = [...PUNCTUATION, ...marks, ...SPACE];
+
     const ast = createNode('', null); // root node
     let node = createNode('', ast); // current node
     ast.children.push(node);
 
-    const opens = (p, n) => (!p || breaks.includes(p)) && !SPACE.includes(n);
+    let stack = [];
+    let wasMark = false;
+
+    const opens = (p, n) => {
+        return (!p || SPACE.includes(p) || wasMark) && !SPACE.includes(n);
+    };
+
     const closes = (n) => (!n || breaks.includes(n));
 
-    let i, j, c, n, p, len = 0, tmp, par, mark = '', stack = [];
+    let i, j, char, next, prev = '', len = 0, tmp, par, mark = '';
     for (i = 0, len = str.length; i < len;) {
-        c = str[i]; // current
-        p = str[i - 1]; // previous
-        if (c === '\n') {
+        char = str[i];
+        if (char === '\n') {
+            // remove all non-multiline marks from stack
             stack = stack.filter(m => options[m].multiline);
         } else {
-            // the following for loop is equivalent to:
-            // mark = marks.find(m => m === str.substr(i, m.length));
-            for (mark = '', j = 0, tmp = marks[0]; j < marks.length; tmp = marks[++j]) {
-                if (c === tmp[0] && tmp === str.substr(i, tmp.length)) {
-                    mark = tmp;
-                    break;
-                }
-            }
+            mark = getMarkAt(str, marks, i);
             if (mark) {
-                n = str[i + mark.length]; // next
-                if (closes(n) && stack.includes(mark)) {
+                j = i + mark.length;
+                next = getMarkAt(str, marks, j) || str[j];
+                if (closes(next) && stack.includes(mark)) {
                     while (stack.length) {
                         node = node.parent;
                         if (stack.pop() === mark) {
@@ -61,22 +78,28 @@ const parse = (str, marks, options) => {
                             break;
                         }
                     }
-                    i += mark.length;
+                    i = j;
+                    prev = mark;
+                    wasMark = true;
                     continue;
                 }
-                if (opens(p, n) && !stack.includes(mark)) {
+                if (opens(prev, next) && !stack.includes(mark)) {
                     stack.push(mark);
                     par = node.parent;
                     tmp = createNode(mark, par);
                     par.children.push(tmp);
                     node = createNode('', tmp);
                     tmp.children.push(node);
-                    i += mark.length;
+                    i = j;
+                    prev = mark;
+                    wasMark = true;
                     continue;
                 }
             }
         }
-        node.text += c;
+        wasMark = false;
+        node.text += char;
+        prev = char;
         i++;
     }
     return ast;

@@ -18,13 +18,17 @@ const DEFAULT_OPTIONS = {
  */
 const render = (node, options, raw, key) => {
     const t = node.type;
-    const join = (raw) => node.children.map((n, key) => render(n, options, raw, key));
+
+    const join = (raw) => node.children.length
+        ? node.children.map((n, key) => render(n, options, raw, key))
+        : null;
+
     if (t && node.closed) {
         return raw
             ? [t, join(raw), t]
             : React.createElement(options[t].renderer, {key}, join(options[t].raw));
     }
-    return [node.text, t, join(raw)];
+    return [node.text + t, join(raw)].filter(Boolean);
 };
 
 const traverse = (children, marks, options) => React.Children.map(children, child => {

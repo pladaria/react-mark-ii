@@ -165,3 +165,36 @@ test('corner case combining style marks', t => {
         '</div>';
     t.is(result, expected);
 });
+
+test('marks inside url', t => {
+    const options = {
+        '_': {renderer: 'i'},
+        '*': {renderer: 'b'},
+    };
+    const str = 'foo.bar/__baz__,*qux*(*bla*)';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected = '<div>foo.bar/__baz__,*qux*(*bla*)</div>';
+    t.is(result, expected);
+});
+
+test('Marks inside markdown link', t => {
+    const options = {
+        '_': {renderer: 'i'},
+        '*': {renderer: 'b'},
+    };
+    const str = '[foo.bar/__baz__,*qux*](*foo* _bar_)';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected = '<div>[foo.bar/__baz__,*qux*](*foo* <i>bar</i>)</div>';
+    t.is(result, expected);
+});
+
+test('joined marks', t => {
+    const options = {
+        '_': {renderer: 'i'},
+        '*': {renderer: 'b'},
+    };
+    const str = '*foo*_bar_';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected = '<div><b>foo</b><i>bar</i></div>';
+    t.is(result, expected);
+});
