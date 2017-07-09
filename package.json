@@ -6,7 +6,7 @@
   "author": "Pedro Ladaria <pedro.ladaria@gmail.com>",
   "scripts": {
     "lint": "eslint ./src",
-    "test": "nyc --reporter=lcov ava --verbose test/test.js",
+    "test": "nyc --reporter=lcov --reporter=text ava --verbose test/test.js",
     "report": "nyc report --reporter=html && opn coverage/index.html",
     "clean": "rimraf dist coverage .nyc_output",
     "build": "babel src --out-dir dist",

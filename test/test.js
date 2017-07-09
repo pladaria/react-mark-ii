@@ -198,3 +198,27 @@ test('joined marks', t => {
     const expected = '<div><b>foo</b><i>bar</i></div>';
     t.is(result, expected);
 });
+
+test('always open after alphanumeric', t => {
+    const options = {'```': {renderer: 'pre', alwaysOpen: true}};
+    const str = 'foo``` bar ```';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected = '<div>foo<pre> bar </pre></div>';
+    t.is(result, expected);
+});
+
+test('always open after space', t => {
+    const options = {'```': {renderer: 'pre', alwaysOpen: true}};
+    const str = ' ``` bar ```';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected = '<div> <pre> bar </pre></div>';
+    t.is(result, expected);
+});
+
+test('always open start of text', t => {
+    const options = {'```': {renderer: 'pre', alwaysOpen: true}};
+    const str = '``` bar ```';
+    const result = render(<Mark options={options}>{str}</Mark>);
+    const expected = '<div><pre> bar </pre></div>';
+    t.is(result, expected);
+});

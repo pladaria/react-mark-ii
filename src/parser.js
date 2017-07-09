@@ -11,6 +11,14 @@ const PUNCTUATION = ',.;:?!()[]{}/-"\'';
  */
 
 /**
+ * @typedef {Object} MarkDef
+ * @property {string} renderer
+ * @property {boolean} raw
+ * @property {boolean} multiline
+ * @property {boolean} alwaysOpen
+ */
+
+/**
  * @param {string} type - Mark type
  * @param {MarkNode} parent - Reference to parent node
  * @return {MarkNode}
@@ -37,7 +45,7 @@ const getMarkAt = (str, marks, position) => {
 /**
  * @param {string} str - String to parse
  * @param {string[]} marks - list of marks
- * @param {Object} options - options for marks
+ * @param {Object<string, MarkDef>} options - options for marks
  * @return {MarkNode}
  */
 const parse = (str, marks, options) => {
@@ -50,10 +58,18 @@ const parse = (str, marks, options) => {
     let stack = [];
     let wasMark = false;
 
-    const opens = (p, n) => {
-        return (!p || SPACE.includes(p) || wasMark) && !SPACE.includes(n);
-    };
+    /**
+     * @param {MarkDef} markDef - mark definition
+     * @param {string} p - Previous char
+     * @param {string} n - Next char
+     */
+    const opens = (markDef, p, n) =>
+        markDef.alwaysOpen
+        || ((!p || SPACE.includes(p) || wasMark) && !SPACE.includes(n));
 
+    /**
+     * @param {string} n - Next char
+     */
     const closes = (n) => (!n || breaks.includes(n));
 
     let i, j, char, next, prev = '', len = 0, tmp, par, mark = '';
@@ -83,7 +99,7 @@ const parse = (str, marks, options) => {
                     wasMark = true;
                     continue;
                 }
-                if (opens(prev, next) && !stack.includes(mark)) {
+                if (opens(options[mark], prev, next) && !stack.includes(mark)) {
                     stack.push(mark);
                     par = node.parent;
                     tmp = createNode(mark, par);

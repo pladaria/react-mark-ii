@@ -54,11 +54,14 @@ Render result:
 
 With the `options` prop you can define your own markup:
 
-Available options:
+Available mark options:
 
   - `renderer`: _React component_ or _tag name string_
-  - `raw`: (_boolean_) if `true`, inner marks will be ignored (useful for code marks)
-  - `multiline`: (_boolean_) if `true` marks can be used across multiple lines
+  - `raw`: (default `false`) if `true`, inner marks will be ignored (useful for code marks)
+  - `multiline`: (default `false`) if `true` marks can be used across multiple lines
+  - `alwaysOpen`: (default `false`) by default, marks must be set after a break character (space or punctuation) and
+  joined to an alphanumeric string). With `alwaysOpen` set to `true` you can ignore these checks. This is useful, for
+  example, for multiline code blocks which may contain spaces after the mark.
 
 ```javascript
 import Mark from 'react-mark-ii';
@@ -68,7 +71,7 @@ const options = {
     '_': {renderer: 'u'},
     '~': {renderer: ({children}) => <span className="red">{children}</span>},
     '`': {renderer: 'kbd', raw: true},
-    '```': {renderer: 'pre', raw: true, multiline: true},
+    '```': {renderer: 'pre', raw: true, multiline: true, alwaysOpen: true},
 };
 
 const str = '**bold** _underline_ ~strike~ `code` ```code\nblock```';

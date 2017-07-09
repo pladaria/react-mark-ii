@@ -1,17 +1,20 @@
 const React = require('react');
 const {parse} = require('./parser');
 
+/**
+ * @const {Object<string, MarkDef>}
+ */
 const DEFAULT_OPTIONS = {
     '*': {renderer: 'strong', raw: false, multiline: false},
     '_': {renderer: 'em', raw: false, multiline: false},
     '~': {renderer: 'del', raw: false, multiline: false},
     '`': {renderer: 'code', raw: true, multiline: false},
-    '```': {renderer: 'pre', raw: true, multiline: true},
+    '```': {renderer: 'pre', raw: true, multiline: true, alwaysOpen: true},
 };
 
 /**
  * @param {Node} node
- * @param {Object} options
+ * @param {Object<string, MarkDef>} options
  * @param {boolean} raw -  if true, inner styles will be ignored
  * @param {number} key - React key
  * @return {React.Node}
@@ -41,6 +44,12 @@ const traverse = (children, marks, options) => React.Children.map(children, chil
     return child;
 });
 
+/**
+ * @param {Object} props
+ * @param {string | React.DOMElement} props.wrap
+ * @param {Object<string, MarkDef>} props.options
+ * @param {React.DOMElement} props.children
+ */
 const Mark = ({
     wrap = 'div',
     options = DEFAULT_OPTIONS,
